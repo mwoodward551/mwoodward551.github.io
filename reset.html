@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset Password – Aurum Forge</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      background: #0c0c0c;
+      color: #f2e18d;
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      padding: 3rem;
+    }
+    input, button {
+      margin: 1rem 0;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      width: 80%;
+      max-width: 320px;
+    }
+    .button {
+      background: linear-gradient(90deg, #f2e18d, #d4af37, #f2e18d);
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 0 10px #d4af37;
+      cursor: pointer;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    #message {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reset Your Password</h1>
+  <input type="email" id="email" placeholder="Enter your email" />
+  <br>
+  <button class="button" onclick="resetPassword()">Send Reset Link</button>
+  <p id="message"></p>
+
+  <script>
+    const supabase = supabase.createClient(
+      'https://ahuxkzylsojucydhhzfq.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
+    );
+
+    async function resetPassword() {
+      const email = document.getElementById('email').value;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset.html'
+      });
+
+      const msg = document.getElementById('message');
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+        msg.style.color = "#ff6a6a";
+      } else {
+        msg.innerText = "✅ Reset link sent. Check your inbox.";
+        msg.style.color = "#aafc8e";
+      }
+    }
+  </script>
+</body>
+</html>

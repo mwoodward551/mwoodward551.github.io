@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurum Forge Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      background-color: #0c0c0c;
+      color: #fff;
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 1rem;
+    }
+    .logout-btn {
+      background: linear-gradient(90deg, #f2e18d, #d4af37, #f2e18d);
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+      border: none;
+      color: black;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 10px #d4af37;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .centered-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+    .centered-logo img {
+      max-width: 240px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="logout-btn" onclick="signOut()">Sign Out</button>
+  </div>
+  <div class="centered-logo">
+    <img src="logo.png" alt="Aurum Forge Logo">
+  </div>
+  <script>
+    const supabase = supabase.createClient(
+      'https://ahuxkzylsojucydhhzfq.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
+    );
+
+    async function signOut() {
+      await supabase.auth.signOut();
+      window.location.href = 'signup.html';
+    }
+
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = 'signup.html';
+      }
+    }
+
+    checkSession();
+  </script>
+</body>
+</html>
