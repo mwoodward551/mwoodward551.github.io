@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aurum Forge Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     body {
       background-color: #0c0c0c;
@@ -39,13 +38,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       height: 80vh;
+      text-align: center;
     }
     .centered-logo img {
       max-width: 240px;
     }
-  </style>
-  <style>
     .under-construction {
       background: rgba(0, 0, 0, 0.8);
       padding: 0.5rem 1rem;
@@ -53,11 +52,10 @@
       font-weight: bold;
       font-size: 1.25rem;
       border: 1px solid #d4af37;
-      margin-bottom: 1.5rem;
+      margin-top: 1rem;
       display: inline-block;
     }
   </style>
-
 </head>
 <body>
   <div class="header">
@@ -65,17 +63,16 @@
   </div>
   <div class="centered-logo">
     <img src="logo.png" alt="Aurum Forge Logo">
+    <div class="under-construction">⚠️ This page is under construction – full dashboard coming soon</div>
   </div>
-  <script>
-    const supabase = supabase.createClient(
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+    const supabase = createClient(
       'https://ahuxkzylsojucydhhzfq.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
     );
-
-    async function signOut() {
-      await supabase.auth.signOut();
-      window.location.href = 'signup.html';
-    }
 
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -84,7 +81,13 @@
       }
     }
 
+    async function signOut() {
+      await supabase.auth.signOut();
+      window.location.href = 'signup.html';
+    }
+
     checkSession();
+    window.signOut = signOut;
   </script>
 </body>
 </html>
