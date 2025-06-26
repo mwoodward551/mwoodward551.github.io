@@ -23,8 +23,6 @@
     h1 {
       font-size: 1.5rem;
     }
-  </style>
-  <style>
     .under-construction {
       background: rgba(0, 0, 0, 0.8);
       padding: 0.5rem 1rem;
@@ -36,7 +34,20 @@
       display: inline-block;
     }
   </style>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+    const supabase = createClient(
+      'https://ahuxkzylsojucydhhzfq.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
+    );
+
+    // Optional: Redirect if not logged in
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      window.location.href = 'signup.html';
+    }
+  </script>
 </head>
 <body>
   <div class="under-construction">⚠️ This page is under construction – full dashboard coming soon</div>
