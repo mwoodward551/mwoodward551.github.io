@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reset Password – Aurum Forge</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     body {
       background: #0c0c0c;
@@ -35,20 +34,33 @@
       0% { background-position: -200% center; }
       100% { background-position: 200% center; }
     }
+    .under-construction {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 0.5rem 1rem;
+      color: #f2e18d;
+      font-weight: bold;
+      font-size: 1.25rem;
+      border: 1px solid #d4af37;
+      margin-bottom: 2rem;
+      display: inline-block;
+    }
     #message {
       margin-top: 1rem;
     }
   </style>
 </head>
 <body>
+  <div class="under-construction">⚠️ This page is under construction – password reset flow coming soon</div>
   <h1>Reset Your Password</h1>
   <input type="email" id="email" placeholder="Enter your email" />
   <br>
   <button class="button" onclick="resetPassword()">Send Reset Link</button>
   <p id="message"></p>
 
-  <script>
-    const supabase = supabase.createClient(
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+    const supabase = createClient(
       'https://ahuxkzylsojucydhhzfq.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
     );
@@ -56,7 +68,7 @@
     async function resetPassword() {
       const email = document.getElementById('email').value;
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset.html'
+        redirectTo: window.location.origin + '/signup.html'  // Redirect after user sets new password
       });
 
       const msg = document.getElementById('message');
@@ -68,6 +80,8 @@
         msg.style.color = "#aafc8e";
       }
     }
+
+    window.resetPassword = resetPassword;
   </script>
 </body>
 </html>
