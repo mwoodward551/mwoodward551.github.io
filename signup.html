@@ -14,7 +14,6 @@
       text-align: center;
       padding: 2rem;
     }
-
     .under-construction {
       background: rgba(0, 0, 0, 0.8);
       padding: 0.5rem 1rem;
@@ -25,7 +24,6 @@
       margin-bottom: 1.5rem;
       display: inline-block;
     }
-
     input, button {
       margin: 0.5rem;
       padding: 0.75rem;
@@ -34,7 +32,6 @@
       border: none;
       width: 250px;
     }
-
     .button {
       background: linear-gradient(90deg, #f2e18d, #d4af37, #f2e18d);
       background-size: 200% auto;
@@ -44,12 +41,10 @@
       box-shadow: 0 0 10px #d4af37;
       cursor: pointer;
     }
-
     @keyframes shimmer {
       0% { background-position: -200% center; }
       100% { background-position: 200% center; }
     }
-
     #message {
       margin-top: 1rem;
     }
@@ -65,38 +60,37 @@
   <p><a href="reset.html" style="color:#f2e18d;">Forgot your password?</a></p>
   <p id="message"></p>
 
-<!-- Supabase JS library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     // === EDIT THESE TWO LINES WITH YOUR SUPABASE PROJECT INFO ===
-    const supabaseUrl = 'https://YOUR_PROJECT_REF.supabase.co';
-    const supabaseKey = 'YOUR_ANON_PUBLIC_KEY';
+    const supabaseUrl = 'https://ahuxkzylsojucydhhzfq.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk';
     // ============================================================
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Google Sign-In
-    document.getElementById('google-login-btn').addEventListener('click', async () => {
+    async function signIn() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById('message').textContent = 'Login failed: ' + error.message;
+        document.getElementById('message').style.color = '#ff4444';
+      } else {
+        window.location.href = '/dashboard.html';
+      }
+    }
+
+    async function signInWithGoogle() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: window.location.origin + '/dashboard.html'
         }
       });
-      if (error) alert('Google sign-in failed: ' + error.message);
-    });
-
-    // Email/Password Sign-In
-    document.getElementById('email-login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        alert('Login failed: ' + error.message);
-      } else {
-        window.location.href = '/dashboard.html';
+        document.getElementById('message').textContent = 'Google sign-in failed: ' + error.message;
+        document.getElementById('message').style.color = '#ff4444';
       }
-    });
+    }
   </script>
 </body>
 </html>
