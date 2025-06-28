@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aurum Forge – Sign In</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     body {
       background: url("img/IMG_7875.jpeg") no-repeat center center fixed;
@@ -60,47 +60,41 @@
   <h1>Join Aurum Forge</h1>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
-  <button class="button" id="email-login">Sign In</button>
-  <button class="button" id="google-login">Sign in with Google</button>
+  <button class="button" onclick="signIn()">Sign In</button>
+  <button class="button" onclick="signInWithGoogle()">Sign in with Google</button>
   <p><a href="reset.html" style="color:#f2e18d;">Forgot your password?</a></p>
   <p id="message"></p>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+<!-- Supabase JS library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // === EDIT THESE TWO LINES WITH YOUR SUPABASE PROJECT INFO ===
+    const supabaseUrl = 'https://YOUR_PROJECT_REF.supabase.co';
+    const supabaseKey = 'YOUR_ANON_PUBLIC_KEY';
+    // ============================================================
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const supabase = createClient(
-      'https://ahuxkzylsojucydhhzfq.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFodXhrenlsc29qdWN5ZGhoemZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTU5NzEsImV4cCI6MjA2NDg5MTk3MX0.UGUHnx9KMVvlPBAGcDFTULaE7brr6h3Z4cb6LvL8ZKk'
-    );
-
-    document.getElementById('email-login').addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-      const msg = document.getElementById('message');
-      if (error) {
-        msg.textContent = "❌ " + error.message;
-        msg.style.color = "#ff6a6a";
-      } else {
-        msg.textContent = "✅ Signed in! Redirecting...";
-        msg.style.color = "#aafc8e";
-        setTimeout(() => window.location.href = "dashboard.html", 1500);
-      }
-    });
-
-    document.getElementById('google-login').addEventListener('click', async () => {
+    // Google Sign-In
+    document.getElementById('google-login-btn').addEventListener('click', async () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: window.location.origin + '/dashboard.html'
         }
       });
+      if (error) alert('Google sign-in failed: ' + error.message);
+    });
 
-      const msg = document.getElementById('message');
+    // Email/Password Sign-In
+    document.getElementById('email-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        msg.textContent = "❌ " + error.message;
-        msg.style.color = "#ff6a6a";
+        alert('Login failed: ' + error.message);
+      } else {
+        window.location.href = '/dashboard.html';
       }
     });
   </script>
